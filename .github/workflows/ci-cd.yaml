@@ -1,0 +1,25 @@
+name: Continious Integration and Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Setup MSBUILD 
+        uses: actions/setup-msbuild@v1.1
+        with:
+          msbuild-architecture: x64
+          vs-version: '[16.4,16.5)'
+      
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build Project
+        run: dotnet build -c Release --no-restore

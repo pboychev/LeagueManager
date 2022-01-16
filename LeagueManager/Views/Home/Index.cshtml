@@ -1,0 +1,53 @@
+﻿@model List<LeagueManager.Models.PlayerModel>
+
+<link href="~/css/site.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
+
+@*<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">*@
+
+
+
+@*<div style="margin: 3% 30% 3% 30%">*@
+<div class="container text-center my-3">
+    <select style="width:13%" class="form-select d-inline" id="gameweekDropdown">
+        <option value="0">Overall</option>
+        <option value="1">August</option>
+        <option value="2">September</option>
+        <option value="3">October</option>
+        <option value="4">November</option>
+        <option value="5">December</option>
+        <option value="6">January</option>
+        <option value="7">February</option>
+        <option value="8">March</option>
+        <option value="9">April</option>
+        <option value="10">May</option>
+    </select>
+    <button style="background-color: #3D195B; border-color: #3D195B;" data-url='@Url.Action("Details","Home")'
+            class="btn btn-primary js-reload-details">
+        View Table
+    </button>
+</div>
+@*</div>*@
+
+<div id="detailsDiv">
+</div>
+
+<script>
+    const loader = `<div id="loader"></div>`;
+
+    $('.js-reload-details').on('click', function (evt) {
+        evt.preventDefault();
+        evt.stopPropagation();
+
+        var $detailDiv = $('#detailsDiv');
+        $detailDiv.html(loader);
+        
+        var url = $(this).data("url");
+        var $dropdown = $('#gameweekDropdown');
+        url += "/" + $dropdown.val();
+
+        $.get(url, function (data) {
+            $detailDiv.html(data);
+        });
+    });
+</script>
