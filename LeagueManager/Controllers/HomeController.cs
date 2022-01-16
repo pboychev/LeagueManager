@@ -19,11 +19,6 @@ namespace LeagueManager.Controllers
             return View();
         }
 
-        public ActionResult Chips()
-        {
-            return View();
-        }
-
         public async Task<IActionResult> Details(int id)
         {
             var playerDetails = await _leagueService.GetPlayerDetails(id);
