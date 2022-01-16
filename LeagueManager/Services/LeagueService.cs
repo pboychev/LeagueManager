@@ -1,12 +1,12 @@
-﻿using LeagueManager.Models;
-using Microsoft.AspNetCore.Http;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using LeagueManager.Constants;
+using LeagueManager.Models;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace LeagueManager.Services
 {
@@ -20,14 +20,14 @@ namespace LeagueManager.Services
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        //private async Task GetPlayer(IEnumerable<PlayerModel> players)
-        //{
+        // private async Task GetPlayer(IEnumerable<PlayerModel> players)
+        // {
         //    foreach (var player in players)
         //    {
         //        var url = $"https://fantasy.premierleague.com/api/entry/{player.Entry}/history/";
         //        var playerHistory = await httpClient.GetStringAsync(url);
 
-        //        var poco = JsonConvert.DeserializeObject<PlayerPoco>(playerHistory);
+        // var poco = JsonConvert.DeserializeObject<PlayerPoco>(playerHistory);
         //        var monthEntry = Months.MonthList.FirstOrDefault(mL => mL.Value == id);
         //        var score = poco.Current.Where(x => x["event"] >= monthEntry?.Start && x["event"] <= monthEntry?.End).Sum(x => x["points"]);
         //        var benchScore = poco.Current.Where(x => x["event"] >= monthEntry?.Start && x["event"] <= monthEntry?.End).Sum(x => x["points_on_bench"]);
@@ -36,7 +36,7 @@ namespace LeagueManager.Services
         //        var test = poco.Chips.Where(x => int.Parse(x["event"]) >= monthEntry?.Start && int.Parse(x["event"]) <= monthEntry?.End);
         //        var resultFinal = score - playerTransfersCost;
 
-        //        var counter = 0;
+        // var counter = 0;
         //        foreach (var testItem in test)
         //        {
         //            player.ChipsUsed += testItem["name"] + " - GW: " + testItem["event"];
@@ -47,15 +47,14 @@ namespace LeagueManager.Services
         //            counter++;
         //        }
 
-        //        player.Score = resultFinal;
+        // player.Score = resultFinal;
         //        player.BenchScore = benchScore;
         //        player.Transfers = transfersMade;
         //        player.PlayerTransfersCost = playerTransfersCost;
         //    }
 
-        //    return player;
-        //}
-
+        // return player;
+        // }
         private IEnumerable<PlayerModel> GetPlayers(PrivateLeague league)
         {
             return league
