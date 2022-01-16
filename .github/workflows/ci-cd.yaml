@@ -48,17 +48,6 @@ jobs:
       - name: Run automated tests
         run: dotnet test -c Release --no-build
 
-  unit-tests:
-    name: Unit tests
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-       - name: Check out code
-         uses: actions/checkout@v2
-
-       - name: Run automated tests
-         run: dotnet test -c Release --no-build
-
 
   sonarcloud:
     name: SonarCloud Scan
