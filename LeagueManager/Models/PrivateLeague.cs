@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace LeagueManager.Models
 {
-    public partial class PrivateLeague
+    public class PrivateLeague
     {
         [JsonProperty("new_entries")]
         public NewEntries NewEntries { get; set; }
@@ -18,7 +18,7 @@ namespace LeagueManager.Models
         public NewEntries Standings { get; set; }
     }
 
-    public partial class League
+    public class League
     {
         [JsonProperty("id")]
         public long Id { get; set; }
@@ -60,7 +60,7 @@ namespace LeagueManager.Models
         public object Rank { get; set; }
     }
 
-    public partial class NewEntries
+    public class NewEntries
     {
         [JsonProperty("has_next")]
         public bool HasNext { get; set; }
@@ -72,7 +72,7 @@ namespace LeagueManager.Models
         public Result[] Results { get; set; }
     }
 
-    public partial class Result
+    public class Result
     {
         [JsonProperty("entry")]
         public long Entry { get; set; }
