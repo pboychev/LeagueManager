@@ -51,7 +51,7 @@ jobs:
       - name: docker build
         run: docker build -t leaguemanager:'${{github.sha}}'
 
-      - name: docker /d:sonar.login
+      - name: docker login
         run: docker login --username '${{secrets.DOCKER_LOGIN}}' --password '${{secrets.DOCKER_PASSWORD}}'
 
       - name: tag docker image
