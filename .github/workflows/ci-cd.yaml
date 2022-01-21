@@ -1,6 +1,8 @@
 name: Continious Integration and Deployment
 env:
   WORKSPACE_ENVIRONMENT_VARIABLE: 'custom workspace environment variable'
+  CLUSTER_NAME: LeagueManager
+  RESOURCE_GROUP: LeagueManager
 on:
   push:
     branches:
@@ -78,6 +80,34 @@ jobs:
 
       - name: push docker image
         run: docker push '${{secrets.DOCKER_LOGIN}}'/leaguemanager:'${{github.sha}}'
+
+  deploy-aks:
+    name: Create AKS
+    needs: docker-image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+ 
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+ 
+      - uses: azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
+          resourceGroupName: rg-gitops-demo
+          template: ./aks/deploy.json
+          parameters: ./aks/deployparams.json
+ 
+      - uses: azure/setup-kubectl@v1
+        with:
+          version: 'v1.18.8'
+ 
+      - uses: azure/aks-set-context@v1
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+          cluster-name: ${{ env.CLUSTER_NAME }}
+          resource-group: ${{ env.RESOURCE_GROUP }}
 
   sonarcloud:
     name: SonarCloud Scan
