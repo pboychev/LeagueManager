@@ -48,6 +48,25 @@ jobs:
       - name: Run automated tests
         run: dotnet test -c Release --no-build
 
+  docker-image:
+    name: Building and upload Docker image to DockerHub
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+     
+      - name: Setup .NET 5  
+        uses: actions/setup-dotnet@v1
+        with:
+           dotnet-version: '5.0.x'
+      
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build Project
+        run: dotnet build -c Release --no-restore
+
       - name: docker build
         run: docker build -t leaguemanager:'${{github.sha}}' .
 
