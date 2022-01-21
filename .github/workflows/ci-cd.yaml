@@ -90,12 +90,12 @@ jobs:
  
       - uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          creds: ${{secrets.AZURE_CREDENTIALS}}
  
       - uses: azure/arm-deploy@v1
         with:
-          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
-          resourceGroupName: rg-gitops-demo
+          subscriptionId: ${{secrets.SUBSCRIPTION_ID}}
+          resourceGroupName: LeagueManager
           template: ./aks/deploy.json
           parameters: ./aks/deployparams.json
  
@@ -105,9 +105,9 @@ jobs:
  
       - uses: azure/aks-set-context@v1
         with:
-          creds: '${{ secrets.AZURE_CREDENTIALS }}'
-          cluster-name: ${{ env.CLUSTER_NAME }}
-          resource-group: ${{ env.RESOURCE_GROUP }}
+          creds: '${{secrets.AZURE_CREDENTIALS}}'
+          cluster-name: ${{env.CLUSTER_NAME}}
+          resource-group: ${{env.RESOURCE_GROUP}}
 
   sonarcloud:
     name: SonarCloud Scan
