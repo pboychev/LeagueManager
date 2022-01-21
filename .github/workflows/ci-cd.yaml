@@ -27,7 +27,7 @@ jobs:
         echo "$STEP_ENVIRONMENT_VARIABLE"
 
   build:
-    name: Building the WebApp
+    name: Building the WebApp and Upload Docker image
     needs: pre-build
     runs-on: ubuntu-latest
     steps:
@@ -47,6 +47,20 @@ jobs:
       
       - name: Run automated tests
         run: dotnet test -c Release --no-build
+
+      - name: docker build
+        run: docker build -t LeagueManager:'${{github.sha}}'
+
+      - name: docker /d:sonar.login
+        run: docker login --username '${{secrets.DOCKER_LOGIN}}' --password '${{secrets.DOCKER_PASSWORD}}'
+
+      - name: tag docker image
+        run: docker tag LeagueManager:'${{github.sha}}' '${{secrets.DOCKER_LOGIN}}'/LeagueManager:'${{github.sha}}'
+
+      - name: push docker image
+        run: docker push '${{secrets.DOCKER_LOGIN}}'/LeagueManager:'${{github.sha}}'
+
+  
 
 
   sonarcloud:
