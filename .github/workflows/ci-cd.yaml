@@ -49,16 +49,16 @@ jobs:
         run: dotnet test -c Release --no-build
 
       - name: docker build
-        run: docker build -t LeagueManager:'${{github.sha}}'
+        run: docker build -t leaguemanager:'${{github.sha}}'
 
       - name: docker /d:sonar.login
         run: docker login --username '${{secrets.DOCKER_LOGIN}}' --password '${{secrets.DOCKER_PASSWORD}}'
 
       - name: tag docker image
-        run: docker tag LeagueManager:'${{github.sha}}' '${{secrets.DOCKER_LOGIN}}'/LeagueManager:'${{github.sha}}'
+        run: docker tag leaguemanager:'${{github.sha}}' '${{secrets.DOCKER_LOGIN}}'/leaguemanager:'${{github.sha}}'
 
       - name: push docker image
-        run: docker push '${{secrets.DOCKER_LOGIN}}'/LeagueManager:'${{github.sha}}'
+        run: docker push '${{secrets.DOCKER_LOGIN}}'/leaguemanager:'${{github.sha}}'
 
   
 
@@ -99,7 +99,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"pboychev_LeagueManager" /o:"pboychev" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"pboychev_leaguemanager" /o:"pboychev" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
           dotnet restore
           dotnet build -c Release --no-restore
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
