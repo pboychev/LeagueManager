@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "aksClusterName": {
-            "value": "GEN-UNIQUE"
+            "value": "LeagueManager"
         },
         "dnsPrefix": {
-            "value": "GEN-UNIQUE"
+            "value": "pboychev"
         }
     }
 }
