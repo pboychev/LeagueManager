@@ -102,12 +102,6 @@ jobs:
       - uses: azure/setup-kubectl@v1
         with:
           version: 'v1.18.8'
- 
-      - uses: azure/aks-set-context@v1
-        with:
-          creds: '${{secrets.AZURE_CREDENTIALS}}'
-          cluster-name: ${{env.CLUSTER_NAME}}
-          resource-group: ${{env.RESOURCE_GROUP}}
 
   pull-image:
     name: Deploy Docker image
@@ -115,6 +109,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Setting context
+        uses: azure/aks-set-context@v1
+        with:
+          creds: '${{secrets.AZURE_CREDENTIALS}}'
+          cluster-name: ${{env.CLUSTER_NAME}}
+          resource-group: ${{env.RESOURCE_GROUP}}
 
       - name: Create secret in Kubernetes cluster-name
         uses: Azure/k8s-create-secret@v1.1
