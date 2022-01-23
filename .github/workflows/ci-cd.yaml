@@ -114,6 +114,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: deploy-aks
     steps:
+      - uses: actions/checkout@v2
+      
       - name: Create secret in Kubernetes cluster-name
       - uses: Azure/k8s-create-secret@v1.1
         with:
