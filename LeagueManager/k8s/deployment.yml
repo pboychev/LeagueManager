@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: LeagueManager
+  name: leaguemanager
 spec:
   selector:
     matchLabels:
-      app: LeagueManager
+      app: leaguemanager
   template:
     metadata:
       labels:
-        app: LeagueManager
+        app: leaguemanager
     spec:
       containers:
-      - name: LeagueManager
+      - name: leaguemanager
         image: housec/leaguemanager
         resources:
           limits:
