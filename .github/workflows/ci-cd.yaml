@@ -129,7 +129,7 @@ jobs:
       - name: Deploy to Kubernetes cluster
         uses: Azure/k8s-deploy@v1
         with:
-          manifest: |
+          manifests: |
             k8s/deployment.yml
             k8s/service.yml
           images: '${{secrets.DOCKER_LOGIN}}/leaguemanager:${{github.sha}}'
