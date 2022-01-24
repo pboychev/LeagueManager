@@ -44,7 +44,7 @@ The application is stored inside LeagueManager folder. We have some UNIT tests i
 Let's first review the following diagram and go trough each step: 
 
 
-![Diagram](/assets/images/CI-CD.png)
+![Diagram](CI-CD.png)
 
 The GitHub Actions workflow has 7 major steps - Pre-build information, SonaCloud Scan, Building the WebApp and run tests, Building and upload Docker image to DockerHub, Create AKS, Deploy Docker image, Build notification status. Upon the successful completion of each step a message is sent to a Slack channel.
 
