@@ -5,6 +5,9 @@ env:
   RESOURCE_GROUP: LeagueManager
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  JOB_ENVIRONMENT_VARIABLE: 'custom job environment variable for ubuntu'
   
 on:
   push:
@@ -13,9 +16,7 @@ on:
 
 jobs:
   pre-build:
-    name: Pre-build information
-    env:
-      JOB_ENVIRONMENT_VARIABLE: 'custom job environment variable for ubuntu'
+    name: Pre-build information      
     runs-on: ubuntu-latest
     steps:
     - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
@@ -32,7 +33,7 @@ jobs:
         echo "$STEP_ENVIRONMENT_VARIABLE"
 
   build:
-    name: Building the WebApp and Upload Docker image
+    name: Building the WebApp and run tests
     needs: pre-build
     runs-on: ubuntu-latest
     steps:
@@ -52,6 +53,24 @@ jobs:
       
       - name: Run automated tests
         run: dotnet test -c Release --no-build
+
+      - name: Send custom JSON data to Slack workflow
+        uses: slackapi/slack-github-action@v1.17.0
+        with:
+          # For posting a rich message using Block Kit
+          payload: |
+            {
+              "text": "Build and UNIT testing result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Build and UNIT testing result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  }
+                }
+              ]
+            }
 
   docker-image:
     name: Building and upload Docker image to DockerHub
@@ -84,6 +103,24 @@ jobs:
       - name: push docker image
         run: docker push '${{secrets.DOCKER_LOGIN}}'/leaguemanager:'${{github.sha}}'
 
+      - name: Send custom JSON data to Slack workflow
+        uses: slackapi/slack-github-action@v1.17.0
+        with:
+          # For posting a rich message using Block Kit
+          payload: |
+            {
+              "text": "Creating image and uploading to DockerHub: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Creating image and uploading to DockerHub: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  }
+                }
+              ]
+            }
+
   deploy-aks:
     name: Create AKS
     needs: docker-image
@@ -105,6 +142,24 @@ jobs:
       - uses: azure/setup-kubectl@v1
         with:
           version: 'v1.18.8'
+
+      - name: Send custom JSON data to Slack workflow
+        uses: slackapi/slack-github-action@v1.17.0
+        with:
+          # For posting a rich message using Block Kit
+          payload: |
+            {
+              "text": "Creating AKS cluster in Azure: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Creating AKS cluster in Azure: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  }
+                }
+              ]
+            }
 
   pull-image:
     name: Deploy Docker image
@@ -138,6 +193,24 @@ jobs:
           images: '${{secrets.DOCKER_LOGIN}}/leaguemanager:${{github.sha}}'
           imagepullsecrets: docker-image-pull-secret
           action: deploy
+
+      - name: Send custom JSON data to Slack workflow
+        uses: slackapi/slack-github-action@v1.17.0
+        with:
+          # For posting a rich message using Block Kit
+          payload: |
+            {
+              "text": "Deploying image to the AKS cluster: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Deploying image to the AKS cluster: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  }
+                }
+              ]
+            }
 
   slack-notify:
     name: Build notification status
@@ -196,9 +269,6 @@ jobs:
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
       - name: Build and analyze
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"pboychev_LeagueManager" /o:"pboychev" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
