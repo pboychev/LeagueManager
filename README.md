@@ -97,7 +97,7 @@ Build notification status step:
 
 I would like to thank my brother (Simeon Boychev) for helping me with the application development. 
 
-I would like to thank Andrey Sotirov @andreysotirov for refactoring the code. 
+I would like to thank Andrey Sotirov @andreysotirov for refactoring the code.  
 
 
 
